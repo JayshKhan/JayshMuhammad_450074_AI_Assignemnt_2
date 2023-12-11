@@ -2,7 +2,7 @@
 // Created by Jaysh Khan on 12/10/23.
 //
 
-#include "../Header/Final.h"
+#include "../header/Final.h"
 
 // Function Definitions
 Solution* GS(State*,State*),*AStar(State*,State*);
@@ -12,6 +12,8 @@ void printState(State*);
 
 Heuristic inputHeuristic();
 
+void checkSolvable(const vector<vector<int>>& vector1);
+
 int main()
 {
     auto* startState = new State();
@@ -19,6 +21,7 @@ int main()
     goalState->puzzleBoard = {{1, 2, 3}, {4, 5, 6}, {7, 8, 0}};
 
     inputPuzzle(&startState->puzzleBoard);
+    checkSolvable(startState->puzzleBoard);
 
     Heuristic heuristic=inputHeuristic();
 
@@ -49,6 +52,30 @@ int main()
     delete solution;
 
     return 0;
+}
+
+void checkSolvable(const vector<vector<int>>& vector1) {
+    int inversions = 0;
+    vector<int> vector2;
+    for (const auto& row : vector1) {
+        for (int num : row) {
+            vector2.push_back(num);
+        }
+    }
+    for (int i = 0; i < vector2.size(); i++) {
+        for (int j = i + 1; j < vector2.size(); j++) {
+            if (vector2[i] > vector2[j] && vector2[i] != 0 && vector2[j] != 0) {
+                inversions++;
+            }
+        }
+    }
+    if (inversions % 2 == 0) {
+        cout << "Solvable" << endl;
+    } else {
+        cout << "Not Solvable" << endl;
+        exit(0);
+    }
+
 }
 
 Heuristic inputHeuristic() {
